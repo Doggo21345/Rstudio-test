@@ -1,0 +1,84 @@
+---
+title: "Google Analytics Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    theme:
+      bg: "#FFFFFF"
+      fg: "#00274D" 
+      primary: "#3498DB"
+      base_font:
+        google: Prompt
+      code_font:
+        google: JetBrains Monog
+    orientation: columns
+    vertical_layout: fill
+---
+
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(ggplot2)
+library(dplyr)
+library(googleAnalyticsR)
+thematic::thematic_rmd()
+
+# Authenticate and set the view ID (replace 'YOUR_VIEW_ID' with actual)
+account_list <- ga_account_list("ga4")
+print(account_list)
+ga_auth(email = "a12pandaa@gmail.com")
+ga4_property_id <- 390743452 
+
+# Extract GA data: Sessions, Bounce Rate, Users, etc.
+# Query data from GA4
+ga_data <- ga_data(
+  ga4_property_id,
+  date_range = c("2023-01-01", "2023-12-31"),
+  metrics = c("sessions", "activeUsers", "bounceRate"),
+  dimensions = c("date")
+)
+
+
+```
+
+
+Column {data-width=650 .tabset}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+ggplot(ga_data, aes(x = date, y = sessions)) +
+  geom_line(color = "#ED79F9") +
+  labs(title = "Sessions Over Time", x = "Date", y = "Sessions") +
+  theme_minimal()
+
+```
+
+### Chart B
+
+```{r}
+
+ggplot(ga_data, aes(x = date, y = activeUsers)) +
+  geom_point(color = "#F79D79") +
+  labs(title = "Active Users Over Time", x = "Date", y = "Active Users") +
+  theme_minimal()
+
+
+```
+
+Column {data-width=350 .tabset}
+-----------------------------------------------------------------------
+
+### Chart C
+
+```{r}
+
+```
+
+### Chart D
+
+```{r}
+
+```
+
+#Returning and other pages
